@@ -1,0 +1,50 @@
+---
+- name: install | Downloading Alertmanager {{ alertmanager_version }}
+  ansible.builtin.get_url:
+    url: "{{ alertmanager_download_url }}"
+    dest: /tmp/
+  become: true
+
+- name: install | Extracting Alertmanager
+  ansible.builtin.unarchive:
+    src: "/tmp/{{ alertmanager_download_dir }}.tar.gz"
+    dest: /tmp/
+    remote_src: true
+  become: true
+
+- name: create alertmanager dir
+  ansible.builtin.file:
+    path: "{{ alertmanager_dir }}"
+    state: directory
+    owner: "{{ prometheus_user_info['user'] }}"
+    group: "{{ prometheus_user_info['group'] }}"
+
+- name: create prometheus dir for binaries
+  ansible.builtin.file:
+    path: "{{ prometheus_bin_dir }}"
+    state: directory
+    owner: "{{ prometheus_user_info['user'] }}"
+    group: "{{ prometheus_user_info['group'] }}"
+
+- name: copy binaries
+  ansible.builtin.copy:
+    src: "/tmp/{{ alertmanager_download_dir }}/{{ item }}"
+    dest: "{{ prometheus_bin_dir }}/{{ item }}"
+    remote_src: true
+    mode: '0774'
+    owner: "{{ prometheus_user_info['user'] }}"
+    group: "{{ prometheus_user_info['group'] }}"
+  loop:
+    - alertmanager
+    - amtool
+  become: true
+
+- name: cleanup directory
+  ansible.builtin.file:
+    path: "/tmp/{{ alertmanager_download_dir }}"
+    state: absent
+
+- name: cleanup files
+  ansible.builtin.file:
+    path: "/tmp/{{ alertmanager_download_dir }}.tar.gz"
+    state: absent
