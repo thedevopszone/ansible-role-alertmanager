@@ -1,0 +1,8 @@
+---
+
+#https://github.com/prometheus/alertmanager/releases/download/v0.27.0/alertmanager-0.27.0.linux-amd64.tar.gz
+
+
+#alertmanager_file: "{{ 'alertmanager-' + alertmanager_version + '.linux-amd64.tar.gz' }}"
+#alertmanager_download: "{{ alertmanager_download_url + '/v' + alertmanager_version + '/' + alertmanager_file }}"
+#alertmanager_full_dir: "{{ alertmanager_install_dir + '/alertmanager-' + alertmanager_version + '.linux-amd64' }}"
