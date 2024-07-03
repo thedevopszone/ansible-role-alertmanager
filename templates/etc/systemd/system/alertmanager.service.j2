@@ -1,0 +1,17 @@
+# Handled by Ansible
+[Unit]
+Description=Alert Manager
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=alertmanager
+Group=alertmanager
+ExecStart=/opt/alertmanager/alertmanager \
+  --config.file=/etc/alertmanager/alertmanager.yml \
+  --storage.path=/data/alertmanager
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
