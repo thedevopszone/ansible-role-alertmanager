@@ -1,0 +1,19 @@
+---
+- name: config | Configuring Alertmanager
+  ansible.builtin.template:
+    src: alertmanager.yml.j2
+    dest: "{{ alertmanager_config_file }}"
+    owner: "{{ prometheus_user_info['user'] }}"
+    group: "{{ prometheus_user_info['group'] }}"
+    mode: u=rw,g=r,o=r
+  notify:
+    - restart alertmanager
+  become: true
+
+- name: config | Ensuring {{ prometheus_local_storage }} Exists
+  ansible.builtin.file:
+    path: "{{ prometheus_local_storage }}"
+    state: directory
+    owner: "{{ prometheus_user_info['user'] }}"
+    group: "{{ prometheus_user_info['group'] }}"
+  become: true
