@@ -1,0 +1,11 @@
+---
+- name: config | Configuring rules
+  ansible.builtin.template:
+    src: rules.yml.j2
+    dest: "{{ prometheus_install_dir }}/prometheus/rules/rules.yml"
+    owner: "{{ prometheus_user_info['user'] }}"
+    group: "{{ prometheus_user_info['group'] }}"
+    mode: u=rw,g=r,o=r
+  notify:
+    - restart prometheus
+  become: true
